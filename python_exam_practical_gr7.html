@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade 7 ICT Quiz 2 Sem 2 — Section B · Practical Tasks</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #08080e;
+  --surface:  #0f0f18;
+  --surface2: #16161f;
+  --border:   #1e1e2e;
+  --border2:  #2a2a3d;
+  --text:     #e2e4f0;
+  --muted:    #4a4a6a;
+  --muted2:   #7070a0;
+  --accent:   #f5a623;   /* warm amber — supermarket receipt yellow */
+  --accent2:  #4fc3f7;   /* cool blue  — price tag */
+  --green:    #56e39f;
+  --red:      #ff6b6b;
+  --code:     #b5e4ff;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  min-height: 100vh;
+  font-size: 14px;
+}
+
+/* subtle grid texture */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0;
+  background-image:
+    linear-gradient(rgba(245,166,35,.012) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(245,166,35,.012) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+
+/* ── HEADER ── */
+header {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(8,8,14,.96);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 32px;
+  display: flex; align-items: stretch; justify-content: space-between; gap: 24px;
+}
+
+.hdr-left {
+  display: flex; align-items: center; gap: 16px;
+  padding: 14px 0;
+}
+
+.hdr-logo {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.hdr-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: .95rem;
+  letter-spacing: -.3px;
+  line-height: 1.3;
+}
+
+.hdr-title .accent { color: var(--accent); }
+
+.hdr-pills {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 10px; letter-spacing: 1.5px; color: var(--muted2);
+}
+
+.pill {
+  border: 1px solid var(--border2);
+  background: var(--surface2);
+  padding: 4px 12px; border-radius: 100px;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+
+/* ── NOTICE BANNER ── */
+.notice-banner {
+  position: relative; z-index: 1;
+  margin: 28px auto 0;
+  max-width: 860px;
+  padding: 0 24px;
+}
+
+.notice-inner {
+  background: rgba(245,166,35,.07);
+  border: 1px solid rgba(245,166,35,.3);
+  border-radius: 10px;
+  padding: 16px 20px;
+  display: flex; gap: 14px; align-items: flex-start;
+}
+
+.notice-icon { font-size: 20px; flex-shrink: 0; line-height: 1.4; }
+
+.notice-text {
+  font-size: .78rem; font-weight: 300;
+  color: var(--muted2); line-height: 1.8;
+}
+
+.notice-text strong { color: var(--accent); font-weight: 500; }
+.notice-text code {
+  color: var(--code);
+  background: rgba(79,195,247,.1);
+  padding: 1px 6px; border-radius: 3px;
+  font-size: .77rem;
+}
+
+/* ── MAIN ── */
+main {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 28px 24px 100px;
+  position: relative; z-index: 1;
+}
+
+/* ── SECTION HEADER ── */
+.section-hdr {
+  display: flex; align-items: center; gap: 14px;
+  margin: 32px 0 20px;
+}
+
+.section-hdr::before, .section-hdr::after {
+  content: ''; flex: 1; height: 1px;
+  background: var(--border);
+}
+
+.section-hdr span {
+  font-size: 9px; letter-spacing: 3px;
+  color: var(--accent); white-space: nowrap;
+  background: rgba(245,166,35,.08);
+  border: 1px solid rgba(245,166,35,.25);
+  padding: 4px 16px; border-radius: 4px;
+}
+
+.section-intro {
+  font-size: .78rem; font-weight: 300;
+  color: var(--muted2); line-height: 1.8;
+  margin-bottom: 28px;
+  padding: 12px 16px;
+  border-left: 3px solid var(--accent);
+  background: rgba(245,166,35,.04);
+  border-radius: 0 6px 6px 0;
+}
+
+.section-intro strong { color: var(--text); font-weight: 500; }
+
+/* ── TASK CARD ── */
+.task-card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  margin-bottom: 24px;
+  overflow: hidden;
+  transition: border-color .25s;
+}
+
+.task-card:hover { border-color: var(--border2); }
+
+/* card top bar */
+.task-head {
+  padding: 16px 20px 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: flex-start; gap: 14px;
+}
+
+.task-num {
+  font-size: 9px; letter-spacing: 1.5px;
+  color: var(--accent2);
+  background: rgba(79,195,247,.1);
+  border: 1px solid rgba(79,195,247,.2);
+  padding: 4px 10px; border-radius: 4px;
+  flex-shrink: 0; margin-top: 2px;
+}
+
+.task-meta { flex: 1; }
+
+.task-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800; font-size: 1rem;
+  letter-spacing: -.3px;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.task-tags {
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+
+.tag {
+  font-size: 9px; letter-spacing: 1.5px;
+  padding: 3px 9px; border-radius: 100px;
+}
+
+.tag-marks {
+  color: var(--accent); border: 1px solid rgba(245,166,35,.3);
+  background: rgba(245,166,35,.07);
+}
+
+.tag-ch {
+  color: var(--muted2); border: 1px solid var(--border2);
+  background: var(--surface2);
+}
+
+/* card body */
+.task-body { padding: 20px; }
+
+.task-desc {
+  font-size: .8rem; font-weight: 300;
+  color: var(--muted2); line-height: 1.9;
+  margin-bottom: 16px;
+}
+
+.task-desc strong { color: var(--text); font-weight: 500; }
+
+.task-desc code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .77rem;
+  color: var(--code);
+  background: rgba(79,195,247,.1);
+  padding: 1px 6px; border-radius: 3px;
+}
+
+/* step list */
+.steps {
+  list-style: none;
+  display: flex; flex-direction: column; gap: 8px;
+  margin-bottom: 18px;
+}
+
+.steps li {
+  display: flex; gap: 12px; align-items: flex-start;
+  font-size: .79rem; font-weight: 300;
+  color: var(--muted2); line-height: 1.75;
+}
+
+.step-num {
+  flex-shrink: 0;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: rgba(245,166,35,.12);
+  border: 1px solid rgba(245,166,35,.25);
+  color: var(--accent);
+  font-size: 9px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 2px;
+}
+
+.steps li strong { color: var(--text); font-weight: 500; }
+.steps li code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .76rem;
+  color: var(--code);
+  background: rgba(79,195,247,.1);
+  padding: 1px 5px; border-radius: 3px;
+}
+
+/* given code block */
+.given-wrap {
+  border: 1px solid var(--border);
+  border-radius: 8px; overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.given-top {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 7px 14px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(255,255,255,.02);
+}
+
+.given-label {
+  font-size: 9px; letter-spacing: 2px; color: var(--muted2);
+}
+
+pre.given {
+  padding: 14px 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .78rem; line-height: 1.9;
+  color: var(--text);
+  overflow-x: auto;
+  background: rgba(0,0,0,.35);
+}
+
+/* syntax highlight helpers */
+.kw  { color: #ff8a80; }
+.fn  { color: #ce93d8; }
+.str { color: #80cbc4; }
+.num { color: #ffcc80; }
+.cm  { color: var(--muted); font-style: italic; }
+
+/* expected output block */
+.expected-wrap {
+  border: 1px solid rgba(86,227,159,.2);
+  border-radius: 8px; overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.expected-top {
+  padding: 7px 14px;
+  border-bottom: 1px solid rgba(86,227,159,.15);
+  background: rgba(86,227,159,.04);
+  font-size: 9px; letter-spacing: 2px;
+  color: var(--green);
+}
+
+pre.expected {
+  padding: 12px 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .77rem; line-height: 1.9;
+  color: var(--green);
+  background: rgba(0,0,0,.25);
+  overflow-x: auto;
+  opacity: .85;
+}
+
+/* submit reminder */
+.submit-reminder {
+  display: flex; gap: 10px; align-items: flex-start;
+  background: rgba(79,195,247,.06);
+  border: 1px solid rgba(79,195,247,.2);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: .76rem; font-weight: 300;
+  color: var(--muted2); line-height: 1.7;
+  margin-top: 4px;
+}
+
+.submit-reminder .ri { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+.submit-reminder strong { color: var(--accent2); font-weight: 500; }
+.submit-reminder code {
+  color: var(--code);
+  background: rgba(79,195,247,.1);
+  padding: 1px 5px; border-radius: 3px;
+  font-size: .75rem;
+}
+
+/* divider between steps and reminder */
+.task-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 16px 0;
+}
+
+/* ── BOTTOM BAR ── */
+#bottom-bar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
+  background: rgba(8,8,14,.97);
+  backdrop-filter: blur(18px);
+  border-top: 1px solid var(--border);
+  padding: 14px 32px;
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 16px; flex-wrap: wrap;
+}
+
+.bar-info {
+  font-size: .75rem; color: var(--muted2); line-height: 1.6;
+}
+
+.bar-info strong { color: var(--accent); }
+
+.bar-progress {
+  display: flex; gap: 6px; align-items: center;
+}
+
+.progress-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--border2);
+  border: 1px solid var(--border2);
+  transition: all .3s;
+  cursor: default;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+/* ── ANIMATIONS ── */
+.task-card {
+  animation: cardIn .4s ease both;
+}
+.task-card:nth-child(1) { animation-delay: .05s; }
+.task-card:nth-child(2) { animation-delay: .10s; }
+.task-card:nth-child(3) { animation-delay: .15s; }
+.task-card:nth-child(4) { animation-delay: .20s; }
+.task-card:nth-child(5) { animation-delay: .25s; }
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header>
+  <div class="hdr-left">
+    <div class="hdr-logo">🛒</div>
+    <div>
+      <div class="hdr-title">Python Exam <span class="accent">— Section B</span></div>
+      <div class="hdr-title" style="font-size:.7rem;font-weight:700;color:var(--muted2);font-family:'JetBrains Mono',monospace;letter-spacing:.5px;">Practical Tasks · Shopping</div>
+    </div>
+  </div>
+  <div class="hdr-pills">
+    <span class="pill">Chs 1 – 6</span>
+    <span class="pill">5 Tasks</span>
+    <span class="pill">50 marks</span>
+  </div>
+</header>
+
+<!-- ── NOTICE BANNER ── -->
+<div class="notice-banner">
+  <div class="notice-inner">
+    <div class="notice-icon">📋</div>
+    <div class="notice-text">
+      <strong>How to submit your answers:</strong> Write your Python code in the editor (Thonny) or an online Python compiler.
+      When you are done with all tasks, <strong>copy your code</strong> and paste it into the corresponding
+      <strong>question in Google Forms</strong>. Do <strong>not</strong> close this page — use it as your question sheet throughout the exam.
+    </div>
+  </div>
+</div>
+
+<main>
+
+
+<!-- ══════════════════════════
+     P1 — Variables & Arithmetic
+══════════════════════════ -->
+<div class="task-card">
+  <div class="task-head">
+    <span class="task-num">P1</span>
+    <div class="task-meta">
+      <div class="task-title">Variables &amp; Arithmetic</div>
+      <div class="task-tags">
+        <span class="tag tag-marks">12 MARKS</span>
+        <span class="tag tag-ch">Ch1</span>
+      </div>
+    </div>
+  </div>
+  <div class="task-body">
+    <p class="task-desc">
+      A supermarket cashier is calculating a customer's receipt at the end of a shopping trip.
+      The customer bought <strong>3 items of bread</strong> at <strong>2 € each</strong> and
+      <strong>2 bottles of juice</strong> at <strong>2.45 € each</strong>.
+      There is a <strong>10% loyalty discount</strong> applied to the total.
+    </p>
+    <ul class="steps">
+      <li><span class="step-num">1</span><span>Store the unit prices as variables: <code>bread_price = 2</code> and <code>juice_price = 2.45</code>.</span></li>
+      <li><span class="step-num">2</span><span>Store the quantities: <code>bread_qty = 3</code> and <code>juice_qty = 2</code>.</span></li>
+      <li><span class="step-num">3</span><span>Calcutate <code>bread_total</code> and <code>juice_total</code> as separate variables.</span></li>
+      <li><span class="step-num">4</span><span>Calculate <code>subtotal</code> (bread_total + juice_total).</span></li>
+      <li><span class="step-num">5</span><span>Calculate <code>discount</code> as 10% of the subtotal and <code>total</code> after discount.</span></li>
+      <li><span class="step-num">6</span><span>Print the receipt lines shown in the expected output below. Use <code>str()</code> to convert numbers when building the strings.</span></li>
+    </ul>
+    <div class="expected-wrap">
+      <div class="expected-top">✓ EXPECTED OUTPUT</div>
+      <pre class="expected">Bread x3: 6 EUR
+Juice x2: 4.9 EUR
+Subtotal: 10.9 EUR
+Discount (10%): 1.09 EUR
+Total: 9.81 EUR</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════
+     P2 — Control Flow
+══════════════════════════ -->
+<div class="task-card">
+  <div class="task-head">
+    <span class="task-num">P2</span>
+    <div class="task-meta">
+      <div class="task-title">Control Flow</div>
+      <div class="task-tags">
+        <span class="tag tag-marks">10 MARKS</span>
+        <span class="tag tag-ch">Ch2</span>
+      </div>
+    </div>
+  </div>
+  <div class="task-body">
+    <p class="task-desc">
+      A supermarket's self-checkout machine categorises each customer's basket
+      and prints a message based on the <strong>basket total</strong> and
+      whether the customer has a <strong>loyalty card</strong>.
+    </p>
+    <div class="given-wrap">
+      <div class="given-top"><span class="given-label">GIVEN — start with these variables</span></div>
+      <pre class="given"><span class="cm"># do not change these — just use them in your code</span>
+basket_total = <span class="num">62</span>
+has_loyalty_card = <span class="kw">True</span></pre>
+    </div>
+    <ul class="steps">
+      <li><span class="step-num">1</span><span>If <code>basket_total</code> is <strong>80 or above</strong> AND the customer <code>has_loyalty_card</code>, print <code>"Gold member deal: 15% off your basket!"</code>.</span></li>
+      <li><span class="step-num">2</span><span>Else if <code>basket_total</code> is <strong>80 or above</strong> AND the customer <code>has_loyalty_card</code> is False, print <code>"Spend over 80 EUR and get a loyalty card for 15% off!"</code>.</span></li>
+      <li><span class="step-num">3</span><span>Else if <code>basket_total</code> is <strong>40 or above</strong>, print <code>"Silver tier: enjoy free delivery on this order."</code>.</span></li>
+      <li><span class="step-num">4</span><span>Otherwise print <code>"Spend 40 EUR or more to unlock free delivery."</code>.</span></li>
+    </ul>
+    <div class="expected-wrap">
+      <div class="expected-top">✓ EXPECTED OUTPUT</div>
+      <pre class="expected">Silver tier: enjoy free delivery on this order.</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════
+     P3 — Lists & Loops
+══════════════════════════ -->
+<div class="task-card">
+  <div class="task-head">
+    <span class="task-num">P3</span>
+    <div class="task-meta">
+      <div class="task-title">Lists &amp; Loops</div>
+      <div class="task-tags">
+        <span class="tag tag-marks">10 MARKS</span>
+        <span class="tag tag-ch">Ch3 + Ch4</span>
+      </div>
+    </div>
+  </div>
+  <div class="task-body">
+    <p class="task-desc">
+      A customer scanned the following items at the self-checkout. The system
+      then updates the basket and prints a full receipt summary.
+    </p>
+    <div class="given-wrap">
+      <div class="given-top"><span class="given-label">GIVEN</span></div>
+      <pre class="given">basket = [<span class="str">"milk"</span>, <span class="str">"bread"</span>, <span class="str">"eggs"</span>, <span class="str">"butter"</span>, <span class="str">"juice"</span>]</pre>
+    </div>
+    <ul class="steps">
+      <li><span class="step-num">1</span><span>Add <code>"cheese"</code> to the basket using <code>.append()</code>.</span></li>
+      <li><span class="step-num">2</span><span>The customer decided not to buy <code>"butter"</code> — remove it using <code>.remove()</code>.</span></li>
+      <li><span class="step-num">3</span><span>Print the updated basket and the number of items using <code>len()</code>.</span></li>
+      <li><span class="step-num">4</span><span>Loop through the basket and print each item in the format: <code>Item: [item]</code></span></li>
+    </ul>
+    <div class="expected-wrap">
+      <div class="expected-top">✓ EXPECTED OUTPUT</div>
+      <pre class="expected">['milk', 'bread', 'eggs', 'juice', 'cheese']
+Items in basket: 5
+Item: milk
+Item: bread
+Item: eggs
+Item: juice
+Item: cheese</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════
+     P4 — Functions
+══════════════════════════ -->
+<div class="task-card">
+  <div class="task-head">
+    <span class="task-num">P4</span>
+    <div class="task-meta">
+      <div class="task-title">Functions</div>
+      <div class="task-tags">
+        <span class="tag tag-marks">8 MARKS</span>
+        <span class="tag tag-ch">Ch5</span>
+      </div>
+    </div>
+  </div>
+  <div class="task-body">
+    <p class="task-desc">
+      The supermarket's pricing system uses a function to calculate the final price after a discount.
+    </p>
+    <ul class="steps">
+      <li><span class="step-num">1</span><span>Define a function <code>final_price(original, discount=0.1)</code> that returns the price after applying the percentage discount. <em>(e.g. discount=0.1 means 10% off)</em></span></li>
+
+      <li><span class="step-num">3</span><span>Call <code>final_price(8.00)</code> and print the result.</span></li>
+      <li><span class="step-num">4</span><span>Call <code>final_price(8.00, 0.25)</code> and print the result.</span></li>
+  </ul>
+    <div class="expected-wrap">
+      <div class="expected-top">✓ EXPECTED OUTPUT</div>
+      <pre class="expected">7.2
+6.0</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════
+     P5 — Strings
+══════════════════════════ -->
+<div class="task-card">
+  <div class="task-head">
+    <span class="task-num">P5</span>
+    <div class="task-meta">
+      <div class="task-title">Strings</div>
+      <div class="task-tags">
+        <span class="tag tag-marks">10 MARKS</span>
+        <span class="tag tag-ch">Ch6</span>
+      </div>
+    </div>
+  </div>
+  <div class="task-body">
+    <p class="task-desc">
+      A supermarket's product database exports a raw receipt string that needs
+      cleaning and formatting before it can be displayed to customers.
+    </p>
+    <div class="given-wrap">
+      <div class="given-top"><span class="given-label">GIVEN</span></div>
+      <pre class="given">receipt = <span class="str">"  milk,bread,eggs,cheese,juice  "</span></pre>
+    </div>
+    <ul class="steps">
+      <li><span class="step-num">1</span><span>Strip the whitespace from <code>receipt</code> and store the result in <code>clean</code>. Print <code>clean</code>.</span></li>
+      <li><span class="step-num">2</span><span>Split <code>clean</code> by <code>","</code> and store the result in <code>items</code>. Print <code>items</code>.</span></li>
+      <li><span class="step-num">3</span><span>Check if <code>"eggs"</code> is in <code>clean</code> and print the result.</span></li>
+      <li><span class="step-num">4</span><span>Replace <code>"juice"</code> with <code>"JUICE"</code> using indexing in <code>clean</code> and print the result.</span></li>
+      <li><span class="step-num">5</span><span>Print the total number of items using <code>len(items)</code> in the format: <code>Total items: 5</code>.</span></li>
+    </ul>
+    <div class="expected-wrap">
+      <div class="expected-top">✓ EXPECTED OUTPUT</div>
+      <pre class="expected">milk,bread,eggs,cheese,juice
+['milk', 'bread', 'eggs', 'cheese', 'juice']
+True
+milk,bread,eggs,cheese,JUICE
+Total items: 5</pre>
+    </div>
+</div>
+
+</main>
+
+<!-- ── BOTTOM BAR ── -->
+<div id="bottom-bar">
+  <div class="bar-info">
+    Write code in your editor · Copy &amp; paste the answer into Google Forms
+  </div>
+</div>
+</body>
+</html>
